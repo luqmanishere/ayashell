@@ -1,9 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import Quickshell
-import Quickshell.Wayland
 import QtQuick
-import QtQuick.Shapes
 import qs.widgets
 
 Scope {
@@ -28,12 +26,10 @@ Scope {
             // WlrLayershell.exclusionMode: ExclusionMode.Ignore
             exclusionMode: ExclusionMode.Ignore
 
-            anchors {
-                top: true
-                left: true
-                bottom: true
-                right: true
-            }
+            anchors.top: true
+            anchors.left: true
+            anchors.bottom: true
+            anchors.right: true
 
             mask: Region {
                 item: bar

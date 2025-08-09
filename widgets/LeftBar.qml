@@ -6,6 +6,8 @@ import qs.data
 import qs.services
 import qs.config
 
+// TODO: seperate panels for exclusion
+
 // target components:
 // 1. workspaces
 // 2. Window name
@@ -20,7 +22,7 @@ Rectangle {
     property int margin: 3
     property var workspaces: NiriService.workspaces_list
 
-    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, tray.implicitWidth, clock.implicitWidth)
+    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, tray.implicitWidth, clock.implicitWidth, battery.implicitWidth)
     height: Screen.height
     color: MatugenManager.rawColors.primary_container
 
@@ -60,12 +62,20 @@ Rectangle {
 
         anchors.bottom: clock.top
         anchors.horizontalCenter: parent.horizontalCenter
-        implicitHeight: 32
-        implicitWidth: 0.7 * parent.width
+        anchors.bottomMargin: Appearance.spacing.smaller
     }
 
     Clock {
         id: clock
+
+        anchors.bottom: battery.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: Appearance.spacing.normal
+    }
+
+    Battery {
+        id: battery
+
         anchors.bottom: placeholder.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: Appearance.spacing.normal
@@ -79,6 +89,22 @@ Rectangle {
 
         implicitWidth: 32
         implicitHeight: 32
+
+        SequentialAnimation on color {
+            loops: Animation.Infinite
+            ColorAnimation {
+                to: "red"
+                duration: 1000
+            }
+            ColorAnimation {
+                to: "yellow"
+                duration: 1000
+            }
+            ColorAnimation {
+                to: "blue"
+                duration: 1000
+            }
+        }
     }
 
     // in no particular order

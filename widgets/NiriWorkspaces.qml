@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -81,13 +82,13 @@ Rectangle {
                 const lines = data.split('\n');
                 for (const line of lines) {
                     if (line.trim()) {
-                        parseNiriEvent(line.trim());
+                        root.parseNiriEvent(line.trim());
                     }
                 }
             }
         }
 
-        onExited: {
+        onExited: function (exitCode) {
             if (exitCode !== 0 && !root.isDestroying) {
                 Qt.callLater(() => running = true);
             }
@@ -104,7 +105,7 @@ Rectangle {
                 const lines = data.split('\n');
                 for (const line of lines) {
                     if (line.trim()) {
-                        parseNiriJSON(line.trim());
+                        root.parseNiriJSON(line.trim());
                     }
                 }
             }
@@ -117,7 +118,7 @@ Rectangle {
         }
     }
 
-    property var workspace_active_window:  ({})
+    property var workspace_active_window: ({})
     property ListModel workspacesv2: ListModel {}
     property int focused_window: 0
 
@@ -125,40 +126,40 @@ Rectangle {
         const json = JSON.parse(line);
         if (json.WindowFocusChanged) {
             const focused_window = json.WindowFocusChanged.id;
-            this.focused_window = focused_window
-            console.log("NIRI: Focused window: " + this.focused_window)
+            this.focused_window = focused_window;
+            console.log("NIRI: Focused window: " + this.focused_window);
         } else if (json.WorkspaceActiveWindowChanged) {
-            var workspace_id = json.WorkspaceActiveWindowChanged.workspace_id
-            var active_id =json.WorkspaceActiveWindowChanged.active_window_id
-            this.workspace_active_window[workspace_id] = active_id
-            console.log("NIRI: Active windows in workspaces: " + JSON.stringify(this.workspace_active_window))
+            var workspace_id = json.WorkspaceActiveWindowChanged.workspace_id;
+            var active_id = json.WorkspaceActiveWindowChanged.active_window_id;
+            this.workspace_active_window[workspace_id] = active_id;
+            console.log("NIRI: Active windows in workspaces: " + JSON.stringify(this.workspace_active_window));
         } else if (json.WorkspaceActivated) {
-            console.log(line)
+            console.log(line);
         } else if (json.WorkspacesChanged) {
-            const data = json.WorkspacesChanged.workspaces
-            console.log(JSON.stringify(data))
+            const data = json.WorkspacesChanged.workspaces;
+            console.log(JSON.stringify(data));
             const newWorkspaces = [];
             for (const workspace of data) {
                 const new_workspace = {
-                        id: workspace.id,
-                        idx: workspace.idx,
-                        name: workspace.name,
-                        output: workspace.output,
-                        isActive: workspace.is_active,
-                        isFocused: workspace.is_focused,
-                        isUrgent: workspace.is_urgent
-                    };
+                    id: workspace.id,
+                    idx: workspace.idx,
+                    name: workspace.name,
+                    output: workspace.output,
+                    isActive: workspace.is_active,
+                    isFocused: workspace.is_focused,
+                    isUrgent: workspace.is_urgent
+                };
 
-                    newWorkspaces.push(new_workspace);
+                newWorkspaces.push(new_workspace);
 
-                    // if (workspace.isFocused) {
-                    //     root.currentWorkspace = workspace.id;
-                    // }
+                // if (workspace.isFocused) {
+                //     root.currentWorkspace = workspace.id;
+                // }
             }
             newWorkspaces.sort((a, b) => a.idx - b.idx);
             root.workspaces.clear();
             root.workspaces.append(newWorkspaces);
-                console.log(JSON.stringify(newWorkspaces))
+            console.log(JSON.stringify(newWorkspaces));
         } else if (json.WindowsChanged) {} else if (json.OverviewOpenedOrClosed) {} else if (json.KeyboardLayoutsChanged) {} else {
             console.log(line);
         }
@@ -262,6 +263,8 @@ Rectangle {
             Rectangle {
                 id: workspacePill
 
+                required property var model
+
                 // Dynamic sizing based on focus state
                 width: model.isFocused ? 18 : 16
                 height: model.isFocused ? 36 : 22
@@ -290,7 +293,7 @@ Rectangle {
                     color: "red"
                     opacity: {
                         // Only pulse inactive pills during effects
-                        if (model.isFocused || !root.effectsActive)
+                        if (workspacePill.model.isFocused || !workspacePill.model.effectsActive)
                             return 0;
 
                         // More subtle pulse that peaks mid-animation
@@ -308,14 +311,14 @@ Rectangle {
                 // Elevation shadow
                 Rectangle {
                     anchors.fill: parent
-                    anchors.topMargin: model.isFocused ? 1 : 0
-                    anchors.leftMargin: model.isFocused ? 0.5 : 0
-                    anchors.rightMargin: model.isFocused ? -0.5 : 0
-                    anchors.bottomMargin: model.isFocused ? -1 : 0
+                    anchors.topMargin: workspacePill.model.isFocused ? 1 : 0
+                    anchors.leftMargin: workspacePill.model.isFocused ? 0.5 : 0
+                    anchors.rightMargin: workspacePill.model.isFocused ? -0.5 : 0
+                    anchors.bottomMargin: workspacePill.model.isFocused ? -1 : 0
                     radius: parent.radius
-                    color: Qt.rgba(0, 0, 0, model.isFocused ? 0.15 : 0)
+                    color: Qt.rgba(0, 0, 0, workspacePill.model.isFocused ? 0.15 : 0)
                     z: -1
-                    visible: model.isFocused
+                    visible: workspacePill.model.isFocused
 
                     Behavior on color {
                         ColorAnimation {
@@ -352,12 +355,12 @@ Rectangle {
                 // Workspace number text
                 Text {
                     anchors.centerIn: parent
-                    text: model.idx.toString()
-                    color: model.isFocused ? "black" : "white"
-                    font.pixelSize: model.isFocused ? 10 : 8
-                    font.bold: model.isFocused
+                    text: workspacePill.model.idx.toString()
+                    color: workspacePill.model.isFocused ? "black" : "white"
+                    font.pixelSize: workspacePill.model.isFocused ? 10 : 8
+                    font.bold: workspacePill.model.isFocused
                     font.family: "Roboto, sans-serif"
-                    visible: model.isFocused || model.isActive
+                    visible: workspacePill.model.isFocused || workspacePill.model.isActive
 
                     Behavior on font.pixelSize {
                         NumberAnimation {

@@ -11,14 +11,14 @@ Column {
         text: clock.hours.toString().padStart(2, '0')
 
         font.pixelSize: 18
-        font.weight: Font.Bold
+        // font.weight: Font.Bold
     }
 
     Text {
         color: MatugenManager.rawColors.on_primary_container
         text: clock.minutes.toString().padStart(2, '0')
         font.pixelSize: 18
-        font.weight: Font.Bold
+        // font.weight: Font.Bold
     }
 
     SystemClock {

@@ -1,12 +1,12 @@
-import "modules/shell"
-import "data"
-import "services"
+//@ pragma UseQApplication
+import qs.modules.shell
+import qs.data
+import qs.services
+import qs.widgets
 
 import Quickshell
-import Quickshell.Io
-import QtQuick
-
 import Quickshell.Services.Notifications
+import QtQuick
 
 ShellRoot {
     id: root
@@ -16,6 +16,30 @@ ShellRoot {
 
     Shell {
         shell: root
+    }
+
+    NotificationServer {
+        id: notificationServer
+        onNotification: function (notification) {
+            console.log("[Notification] Received notification:", notification.appName, "-", notification.summary);
+            notification.tracked = true;
+            if (notificationPopup.notificationsVisible) {
+                // add to popups
+                notificationPopup.addNotification(notification);
+            }
+
+            // TODO: history
+
+            if (notification.hasInlineReply) {
+                console.log("[Notification] Notification has inline replies:", notification.appName, "-", notification.summary);
+            }
+
+        // TODO: check actions
+        }
+    }
+
+    NotificationPopup {
+        id: notificationPopup
     }
 
     Component.onCompleted: {
