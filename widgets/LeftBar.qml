@@ -18,7 +18,7 @@ import qs.config
 
 Rectangle {
     id: bar
-    property var shell
+    required property var shell
     property int margin: 3
     property var workspaces: NiriService.workspaces_list
 
@@ -76,36 +76,44 @@ Rectangle {
     Battery {
         id: battery
 
-        anchors.bottom: placeholder.top
+        anchors.bottom: notifIcon.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottomMargin: Appearance.spacing.normal
+        anchors.bottomMargin: Appearance.spacing.small
+    }
+
+    NotificationIcon {
+        id: notifIcon
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: Appearance.spacing.small
+        shell: bar.shell
     }
 
     // TODO: status icons
-    Rectangle {
-        id: placeholder
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+    // Rectangle {
+    //     id: placeholder
+    //     anchors.bottom: parent.bottom
+    //     anchors.horizontalCenter: parent.horizontalCenter
 
-        implicitWidth: 32
-        implicitHeight: 32
+    //     implicitWidth: 32
+    //     implicitHeight: 32
 
-        SequentialAnimation on color {
-            loops: Animation.Infinite
-            ColorAnimation {
-                to: "red"
-                duration: 1000
-            }
-            ColorAnimation {
-                to: "yellow"
-                duration: 1000
-            }
-            ColorAnimation {
-                to: "blue"
-                duration: 1000
-            }
-        }
-    }
+    //     SequentialAnimation on color {
+    //         loops: Animation.Infinite
+    //         ColorAnimation {
+    //             to: "red"
+    //             duration: 1000
+    //         }
+    //         ColorAnimation {
+    //             to: "yellow"
+    //             duration: 1000
+    //         }
+    //         ColorAnimation {
+    //             to: "blue"
+    //             duration: 1000
+    //         }
+    //     }
+    // }
 
     // in no particular order
     // TODO: power menu

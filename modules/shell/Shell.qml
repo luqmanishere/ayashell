@@ -6,7 +6,8 @@ import qs.widgets
 
 Scope {
     id: scope
-    property var shell
+    required property var shell
+    required property var notificationHistoryWin
 
     Variants {
 
@@ -39,6 +40,8 @@ Scope {
             LeftBar {
                 id: bar
                 shell: scope.shell
+
+                property var notificationHistoryWin: scope.notificationHistoryWin
             }
         }
     }

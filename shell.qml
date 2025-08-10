@@ -13,9 +13,19 @@ ShellRoot {
     property var matugen: MatugenManager
     property var matugen_service: MatugenService {}
     property var niri_service: NiriService
+    property var notificationHistoryWin: notificationHistoryLoader.active ? notificationHistoryLoader.item : null
 
     Shell {
         shell: root
+        notificationHistoryWin: notificationHistoryLoader.active ? notificationHistoryLoader.item : null
+    }
+
+    // Function to load notification history
+    function loadNotificationHistory() {
+        if (!notificationHistoryLoader.active) {
+            notificationHistoryLoader.loading = true;
+        }
+        return notificationHistoryLoader;
     }
 
     NotificationServer {
@@ -29,6 +39,16 @@ ShellRoot {
             }
 
             // TODO: history
+            if (notificationHistoryLoader.active && notificationHistoryLoader.item) {
+                notificationHistoryLoader.item.addToHistory({
+                    id: notification.id,
+                    appName: notification.appName || "Notification",
+                    summary: notification.summary || "",
+                    body: notification.body || "",
+                    urgency: notification.urgency,
+                    timestamp: Date.now()
+                });
+            }
 
             if (notification.hasInlineReply) {
                 console.log("[Notification] Notification has inline replies:", notification.appName, "-", notification.summary);
@@ -40,6 +60,12 @@ ShellRoot {
 
     NotificationPopup {
         id: notificationPopup
+    }
+
+    LazyLoader {
+        id: notificationHistoryLoader
+        loading: false
+        component: NotificationHistory {}
     }
 
     Component.onCompleted: {
