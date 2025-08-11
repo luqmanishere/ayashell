@@ -20,12 +20,10 @@ Rectangle {
             if (model.output === shellOutputName && model.is_active && model.is_focused) {
                 window_id = model.active_window_id;
                 break;
-                console.log("[WindowName]:", i, "-", JSON.stringify(model));
             }
         }
         for (var i = 0; i < NiriService.windows_list.count; i++) {
             var model = NiriService.windows_list.get(i).window;
-            // console.log("[WindowName]:", i, "-", JSON.stringify(model));
             if (model.id === window_id) {
                 name = model.title;
                 break;

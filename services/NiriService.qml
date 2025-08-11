@@ -156,7 +156,7 @@ Singleton {
             };
 
             // root.windows_map[window.id] = new_window;
-            updateWindow(new_window);
+            updateWindow(window.id, new_window);
 
             if (window.is_focused) {
                 forEachWindow(function (window_id, win, i) {
@@ -235,6 +235,8 @@ Singleton {
     }
 
     function forEachWorkspace(callback) {
+        if (callback.length < 4)
+            console.warn("[forEachWorkspace] not enough arguments!");
         for (var i = 0; i < root.workspaces_list.count; ++i) {
             var item = root.workspaces_list.get(i);
             var key = item.workspace_id;
@@ -249,6 +251,8 @@ Singleton {
         }
     }
     function addWindow(window_id, window) {
+        if (arguments.length < 2)
+            console.error("[addWindow]: not enough arguments!");
         root.windows_list.append({
             window_id: window_id,
             window: window
@@ -270,6 +274,8 @@ Singleton {
     }
 
     function updateWindow(window_id, window) {
+        if (arguments.length < 2)
+            console.error("[updateWindow]: not enough arguments!");
         const list = root.windows_list;
         for (var i = 0; i < list.count; ++i) {
             if (list.get(i).window_id === window_id) {
@@ -289,6 +295,8 @@ Singleton {
     }
 
     function forEachWindow(callback) {
+        if (callback.length < 3)
+            console.warn("[forEachWindow] not enough arguments!");
         for (var i = 0; i < root.windows_list.count; ++i) {
             var item = root.windows_list.get(i);
             var key = item.window_id;
