@@ -19,11 +19,12 @@ import qs.config
 Rectangle {
     id: bar
     required property var shell
+    required property ShellScreen screen
     property int margin: 3
     property var workspaces: NiriService.workspaces_list
     readonly property int exclusiveZone: bar.implicitWidth
 
-    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, tray.implicitWidth, clock.implicitWidth, battery.implicitWidth)
+    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, clock.implicitWidth, battery.implicitWidth)
     height: Screen.height
     color: MatugenManager.rawColors.primary_container
 
@@ -56,7 +57,16 @@ Rectangle {
         anchors.topMargin: Appearance.padding.smaller
     }
 
-    // TODO: active window
+    WindowName {
+        id: windowName
+        screen: bar.screen
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        anchors.top: workspaces.bottom
+        anchors.bottom: tray.top
+        anchors.margins: Appearance.spacing.large
+    }
 
     Tray {
         id: tray

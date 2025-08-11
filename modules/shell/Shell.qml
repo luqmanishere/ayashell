@@ -40,6 +40,7 @@ Scope {
             LeftBar {
                 id: bar
                 shell: scope.shell
+                screen: win.screen
 
                 property var notificationHistoryWin: scope.notificationHistoryWin
             }

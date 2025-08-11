@@ -4,12 +4,18 @@ import qs.data
 
 Rectangle {
     id: root
+    implicitHeight: workspaceColumn.implicitHeight
+    implicitWidth: workspaceColumn.implicitWidth
+    radius: 16
+    // TODO: color
+    color: "transparent"
 
     Column {
         id: workspaceColumn
         property var workspaces: NiriService.workspaces_list
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        // anchors.horizontalCenter: parent.horizontalCenter
+        anchors.centerIn: parent
 
         spacing: 6
 

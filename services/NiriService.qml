@@ -19,6 +19,7 @@ Singleton {
     property bool isDestroying: false
 
     signal workspaceChanged(int workspaceId)
+    signal stateChanged
 
     Process {
         id: niriJSONProcess
@@ -137,6 +138,7 @@ Singleton {
                 };
 
                 root.windows_map[window.id] = new_window;
+                addWindow(window.id, new_window);
             }
             // console.log("NIRI: Windows changed: " + JSON.stringify(root.windows_map));
             console.log("NIRI: Windows changed.");
@@ -153,31 +155,43 @@ Singleton {
                 is_urgent: window.is_urgent
             };
 
-            root.windows_map[window.id] = new_window;
+            // root.windows_map[window.id] = new_window;
+            updateWindow(new_window);
 
             if (window.is_focused) {
-                for (var win in root.windows_map) {
+                forEachWindow(function (window_id, win, i) {
                     if (win.id !== new_window.id) {
                         win.is_focused = false;
-                        root.windows_map[win.id] = win;
                     }
-                }
+                });
+                // for (var win in root.windows_map) {
+                //     if (win.id !== new_window.id) {
+                //         win.is_focused = false;
+                //         root.windows_map[win.id] = win;
+                //     }
+                // }
             }
             console.log(`NIRI: Window ${new_window.id} changed`);
         } else if (json.WindowClosed) {
             const window_id = json.WindowClosed.id;
-            root.workspaces_map[window_id] = null;
+            removeWindow(window_id);
+            // root.workspaces_map[window_id] = null;
             console.log(`NIRI: Window ${window_id} closed`);
         } else if (json.WindowFocusChanged) {
             const window_id = json.WindowFocusChanged.id;
-            for (var win in root.windows_map) {
-                win.is_focused = window_id === win.id;
-                root.windows_map[win.id] = win;
-            }
+            forEachWindow(function (id, win, i) {
+                win.is_focused = window_id === id;
+            });
+            // for (var win in root.windows_map) {
+            //     win.is_focused = window_id === win.id;
+            //     root.windows_map[win.id] = win;
+            // }
             console.log(`NIRI: Focused window ${window_id}`);
         } else {
             console.warn(`NIRI: Unimplemented event: ${line}`);
         }
+
+        stateChanged();
     }
 
     function addWorkspace(workspace_id, workspace) {
@@ -205,7 +219,10 @@ Singleton {
         const list = root.workspaces_list;
         for (var i = 0; i < list.count; ++i) {
             if (list.get(i).workspace_id === workspace_id) {
-                list.set(i, workspace);
+                list.set(i, {
+                    workspace_id: workspace_id,
+                    workspace: workspace
+                });
                 break;
             }
         }
@@ -228,6 +245,59 @@ Singleton {
             root.workspaces_list.set(i, {
                 workspace_id: key,
                 workspace: mapValue
+            });
+        }
+    }
+    function addWindow(window_id, window) {
+        root.windows_list.append({
+            window_id: window_id,
+            window: window
+        });
+        root.windows_map[window_id] = window;
+    }
+
+    function removeWindow(window_id) {
+        const list = root.windows_list;
+        // remove from list model
+        for (var i = 0; i < root.windows_list.count; ++i) {
+            if (list.get(i).window_id === window_id) {
+                list.remove(i);
+                break;
+            }
+        }
+        //remove from map
+        delete root.windows_map[window_id];
+    }
+
+    function updateWindow(window_id, window) {
+        const list = root.windows_list;
+        for (var i = 0; i < list.count; ++i) {
+            if (list.get(i).window_id === window_id) {
+                list.set(i, {
+                    window_id: window_id,
+                    window: window
+                });
+                break;
+            }
+        }
+        root.windows_map[window_id] = window;
+    }
+
+    function clearWindows() {
+        root.windows_list.clear();
+        root.windows_map = ({});
+    }
+
+    function forEachWindow(callback) {
+        for (var i = 0; i < root.windows_list.count; ++i) {
+            var item = root.windows_list.get(i);
+            var key = item.window_id;
+            var value = item.window;
+
+            callback(key, value, i);
+            root.windows_list.set(i, {
+                window_id: key,
+                window: value
             });
         }
     }
