@@ -43,6 +43,11 @@ Scope {
 
                 property var notificationHistoryWin: scope.notificationHistoryWin
             }
+
+            Exclusions {
+                bar: bar
+                screen: win.modelData
+            }
         }
     }
 }

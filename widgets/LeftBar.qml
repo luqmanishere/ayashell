@@ -21,6 +21,7 @@ Rectangle {
     required property var shell
     property int margin: 3
     property var workspaces: NiriService.workspaces_list
+    readonly property int exclusiveZone: bar.implicitWidth
 
     implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, tray.implicitWidth, clock.implicitWidth, battery.implicitWidth)
     height: Screen.height
