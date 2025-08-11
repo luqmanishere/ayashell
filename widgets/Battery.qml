@@ -19,7 +19,7 @@ Item {
         id: text
         anchors.horizontalCenter: parent.horizontalCenter
         color: MatugenManager.rawColors.on_primary_container
-        text: `${Math.round(root.displayDevice.percentage * 100)}%`
+        text: `${Math.round((root.displayDevice.energy / root.displayDevice.energyCapacity) * 100)}%`
 
         font.pixelSize: Appearance.font.size.normal
         // font.weight: Font.Bold
