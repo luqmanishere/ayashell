@@ -30,29 +30,30 @@ MouseArea {
         menu: item.modelData.menu
     }
 
-    SimplePopup {
-        id: simplepopup
-        anchor.window: item.QsWindow.window
-        anchor.rect.x: 100
-        anchor.rect.y: 100
-        visible: true
-        opened: false
+    // TODO: make this work one day
+    // SimplePopup {
+    //     id: simplepopup
+    //     anchor.window: item.QsWindow.window
+    //     anchor.rect.x: 100
+    //     anchor.rect.y: 100
+    //     visible: true
+    //     opened: false
 
-        implicitHeight: 100
-        implicitWidth: 100
-        content: Column {
-            id: col
+    //     implicitHeight: 100
+    //     implicitWidth: 100
+    //     content: Column {
+    //         id: col
 
-            Repeater {
-                model: opener.children.values
+    //         Repeater {
+    //             model: opener.children.values
 
-                Text {
-                    required property var modelData
-                    text: `${modelData.text}`
-                }
-            }
-        }
-    }
+    //             Text {
+    //                 required property var modelData
+    //                 text: `${modelData.text}`
+    //             }
+    //         }
+    //     }
+    // }
 
     // TODO: customise the menu
     QsMenuAnchor {
