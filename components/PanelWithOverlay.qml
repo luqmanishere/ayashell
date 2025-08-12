@@ -9,7 +9,7 @@ PanelWindow {
     id: outerPanel
     property bool showOverlay: false
     property int topMargin: 36
-    property color overlayColor: showOverlay ? MatugenManager.rawColors.secondary_container : "transparent"
+    property color overlayColor: showOverlay ? MatugenManager.raw_colors.secondary_container : "transparent"
 
     function dismiss() {
         visible = false;

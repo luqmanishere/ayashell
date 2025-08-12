@@ -26,7 +26,7 @@ Rectangle {
 
     implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, clock.implicitWidth, battery.implicitWidth)
     height: Screen.height
-    color: MatugenManager.rawColors.primary_container
+    color: MatugenManager.raw_colors.primary_container
 
     ClippingRectangle {
         id: image
@@ -39,7 +39,7 @@ Rectangle {
         // height: 32
         // width: 32
         radius: width / 2
-        color: MatugenManager.rawColors.on_primary_container
+        color: MatugenManager.raw_colors.on_primary_container
         clip: true
 
         Image {
@@ -71,9 +71,17 @@ Rectangle {
     Tray {
         id: tray
 
-        anchors.bottom: clock.top
+        anchors.bottom: idleIcon.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: Appearance.spacing.smaller
+    }
+
+    IdleIcon {
+        id: idleIcon
+
+        anchors.bottom: clock.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: Appearance.spacing.small
     }
 
     Clock {

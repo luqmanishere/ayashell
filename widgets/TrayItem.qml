@@ -9,20 +9,37 @@ import qs.config
 MouseArea {
     id: item
     required property SystemTrayItem modelData
+    property int popupX
+    property int popupY
 
     acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     implicitWidth: Appearance.font.size.small * 2
     implicitHeight: Appearance.font.size.small * 2
+    hoverEnabled: true
 
     onClicked: event => {
-        if (event.button === Qt.LeftButton)
+        if (!modelData)
+            return;
+
+        if (event.button === Qt.LeftButton && modelData.activate)
             modelData.activate();
-        else if (event.button === Qt.MiddleButton)
+        else if (event.button === Qt.MiddleButton && modelData.secondaryActivate)
             modelData.secondaryActivate();
-        else if (event.button === Qt.RightButton)
+        else if (event.button === Qt.RightButton && modelData.menu)
             menuAnchor.open();
-    // simplepopup.opened = true;
+    }
+
+    onEntered: {
+        console.log("area entered");
+        var pos = item.mapToItem(item.QsWindow.window.window, item.width, item.height / 2);
+        item.popupX = pos.x;
+        item.popupY = pos.y - (simplepopup.implicitHeight / 2);
+        simplepopup.opened = true;
+        console.log(pos);
+    }
+    onExited: {
+        simplepopup.opened = item.containsMouse || popupMouse.containsMouse;
     }
 
     QsMenuOpener {
@@ -30,16 +47,46 @@ MouseArea {
         menu: item.modelData.menu
     }
 
-    // TODO: make this work one day
+    // PopupWindow {
+    //     // anchor.window: item.QsWindow.window
+    //     implicitHeight: rect.implicitHeight
+    //     implicitWidth: rect.implicitWidth
+    //     visible: true
+    //     anchor.item: item
+    //     anchor.margins.left: 10
+
+    //     Rectangle {
+    //         id: rect
+
+    //         implicitHeight: col2.height
+    //         implicitWidth: col2.width
+
+    //         color: "white"
+    //         Column {
+    //             id: col2
+
+    //             Repeater {
+    //                 model: opener.children.values
+
+    //                 Text {
+    //                     required property var modelData
+    //                     text: `${modelData.text}`
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    // // TODO: make this work one day
     // SimplePopup {
     //     id: simplepopup
     //     anchor.window: item.QsWindow.window
-    //     anchor.rect.x: 100
-    //     anchor.rect.y: 100
+    //     anchor.rect.x: item.popupX
+    //     anchor.rect.y: item.popupY
     //     visible: true
     //     opened: false
 
-    //     implicitHeight: 100
+    //     implicitHeight: content.QObject.height
     //     implicitWidth: 100
     //     content: Column {
     //         id: col
@@ -52,6 +99,10 @@ MouseArea {
     //                 text: `${modelData.text}`
     //             }
     //         }
+    //     }
+    //     MouseArea {
+    //         id: popupMouse
+    //         anchors.fill: parent
     //     }
     // }
 

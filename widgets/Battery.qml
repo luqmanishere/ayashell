@@ -18,7 +18,7 @@ Item {
     Text {
         id: text
         anchors.horizontalCenter: parent.horizontalCenter
-        color: MatugenManager.rawColors.on_primary_container
+        color: MatugenManager.raw_colors.on_primary_container
         text: `${Math.round((root.displayDevice.energy / root.displayDevice.energyCapacity) * 100)}%`
 
         font.pixelSize: Appearance.font.size.normal

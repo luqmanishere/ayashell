@@ -95,8 +95,8 @@ Window {
     Rectangle {
         anchors.fill: parent
         radius: 18
-        color: MatugenManager.rawColors.secondary_container || "#222"
-        border.color: MatugenManager.rawColors.outline || "#444"
+        color: MatugenManager.raw_colors.secondary_container || "#222"
+        border.color: MatugenManager.raw_colors.outline || "#444"
         border.width: 1 * 1
         opacity: 0.97
         z: 1
@@ -105,7 +105,7 @@ Window {
     Text {
         id: tooltipText
         text: tooltipWindow.text
-        color: MatugenManager.rawColors.on_tertiary_container
+        color: MatugenManager.raw_colors.on_tertiary_container
         // font.family: Theme.fontFamil
         font.pixelSize: Appearance.font.size.small * 1
         anchors.centerIn: parent

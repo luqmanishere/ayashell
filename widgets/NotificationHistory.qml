@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
+import Qt.labs.platform
 import qs.components
 import qs.data
 import qs.config
@@ -11,7 +12,7 @@ PanelWithOverlay {
     id: notificationHistoryWin
 
     // TODO: actual settings
-    property string historyFilePath: "/home/luqman/.config/ayashell/" + "notification_history.json"
+    property string historyFilePath: Constants.paths.notificationHistory
     property bool hasUnread: notificationHistoryWinRect.hasUnread && !notificationHistoryWinRect.visible
 
     function addToHistory(notification) {
@@ -24,7 +25,7 @@ PanelWithOverlay {
         property int maxPopupHeight: 800
         property int minPopupHeight: 210
         property int contentHeight: headerRow.height + historyList.contentHeight + 50
-        property int maxHistory: 100
+        property int maxHistory: Constants.notifications.maxHistory
         property bool hasUnread: true
 
         signal unreadChanged(bool hasUnread)
@@ -143,7 +144,7 @@ PanelWithOverlay {
         anchors.right: parent.right
         anchors.topMargin: 4
         anchors.rightMargin: 4
-        color: MatugenManager.rawColors.primary_container
+        color: MatugenManager.raw_colors.primary_container
         radius: 20
         onVisibleChanged: {
             if (visible) {
@@ -199,7 +200,7 @@ PanelWithOverlay {
             width: notificationHistoryWinRect.width
             height: notificationHistoryWinRect.height
             anchors.fill: parent
-            color: MatugenManager.rawColors.primary_container
+            color: MatugenManager.raw_colors.primary_container
             radius: 20
 
             Column {
@@ -224,7 +225,7 @@ PanelWithOverlay {
                         text: "Notification History"
                         font.pixelSize: 18
                         font.bold: true
-                        color: MatugenManager.rawColors.on_primary_container
+                        color: MatugenManager.raw_colors.on_primary_container
                         Layout.alignment: Qt.AlignVCenter
                     }
 
@@ -238,8 +239,8 @@ PanelWithOverlay {
                         width: 90
                         height: 32
                         radius: 16
-                        color: clearAllMouseArea.containsMouse ? MatugenManager.rawColors.primary : MatugenManager.rawColors.surface_variant
-                        border.color: MatugenManager.rawColors.primary
+                        color: clearAllMouseArea.containsMouse ? MatugenManager.raw_colors.primary : MatugenManager.raw_colors.surface_variant
+                        border.color: MatugenManager.raw_colors.primary
                         border.width: 1
                         Layout.alignment: Qt.AlignVCenter
 
@@ -251,7 +252,7 @@ PanelWithOverlay {
                                 text: "delete_sweep"
                                 font.family: "Material Symbols Outlined"
                                 font.pixelSize: 14
-                                color: clearAllMouseArea.containsMouse ? MatugenManager.rawColors.on_primary : MatugenManager.rawColors.primary
+                                color: clearAllMouseArea.containsMouse ? MatugenManager.raw_colors.on_primary : MatugenManager.raw_colors.primary
                                 verticalAlignment: Text.AlignVCenter
                             }
 
@@ -259,7 +260,7 @@ PanelWithOverlay {
                                 text: "Clear"
                                 font.pixelSize: Appearance.font.size.small
                                 font.bold: true
-                                color: clearAllMouseArea.containsMouse ? MatugenManager.rawColors.on_primary : MatugenManager.rawColors.primary
+                                color: clearAllMouseArea.containsMouse ? MatugenManager.raw_colors.on_primary : MatugenManager.raw_colors.primary
                                 verticalAlignment: Text.AlignVCenter
                             }
                         }
@@ -287,12 +288,12 @@ PanelWithOverlay {
                     anchors.right: parent.right
                     anchors.topMargin: 56
                     height: notificationHistoryWinRect.height - 56 - 12
-                    color: MatugenManager.rawColors.surface_variant
+                    color: MatugenManager.raw_colors.surface_variant
                     radius: 20
 
                     Rectangle {
                         anchors.fill: parent
-                        color: MatugenManager.rawColors.surface
+                        color: MatugenManager.raw_colors.surface
                         radius: 20
                         z: 0
                     }
@@ -328,7 +329,7 @@ PanelWithOverlay {
 
                                         width: parent.width - 24
                                         anchors.horizontalCenter: parent.horizontalCenter
-                                        color: MatugenManager.rawColors.primary_container
+                                        color: MatugenManager.raw_colors.primary_container
                                         radius: 16
                                         anchors.top: parent.top
                                         anchors.bottom: parent.bottom
@@ -353,8 +354,8 @@ PanelWithOverlay {
                                                     width: 28
                                                     height: 28
                                                     radius: 20
-                                                    color: MatugenManager.rawColors.primary
-                                                    border.color: Qt.darker(MatugenManager.rawColors.primary, 1.2)
+                                                    color: MatugenManager.raw_colors.primary
+                                                    border.color: Qt.darker(MatugenManager.raw_colors.primary, 1.2)
                                                     border.width: 1.2
                                                     Layout.alignment: Qt.AlignVCenter
 
@@ -364,7 +365,7 @@ PanelWithOverlay {
                                                         // font.family: Theme.fontFamily
                                                         font.pixelSize: 15
                                                         font.bold: true
-                                                        color: MatugenManager.rawColors.primary_container
+                                                        color: MatugenManager.raw_colors.primary_container
                                                     }
                                                 }
 
@@ -377,7 +378,7 @@ PanelWithOverlay {
                                                     Text {
                                                         text: model.appName || "No Notifications"
                                                         font.bold: true
-                                                        color: MatugenManager.rawColors.on_primary
+                                                        color: MatugenManager.raw_colors.on_primary
                                                         // font.family: Theme.fontFamily
                                                         font.pixelSize: Appearance.font.size.small
                                                         verticalAlignment: Text.AlignVCenter
@@ -386,7 +387,7 @@ PanelWithOverlay {
                                                     Text {
                                                         visible: !model.isPlaceholder
                                                         text: model.timestamp ? notificationHistoryWinRect.formatTimestamp(model.timestamp) : ""
-                                                        color: MatugenManager.rawColors.surface
+                                                        color: MatugenManager.raw_colors.surface
                                                         // font.family: Theme.fontFamily
                                                         font.pixelSize: Appearance.font.size.small
                                                         verticalAlignment: Text.AlignVCenter
@@ -400,7 +401,7 @@ PanelWithOverlay {
 
                                             Text {
                                                 text: model.summary || (model.isPlaceholder ? "You're all caught up!" : "")
-                                                color: MatugenManager.rawColors.on_secondary
+                                                color: MatugenManager.raw_colors.on_secondary
                                                 // font.family: Theme.fontFamily
                                                 font.pixelSize: Appearance.font.size.normal
                                                 width: parent.width
@@ -409,7 +410,7 @@ PanelWithOverlay {
 
                                             Text {
                                                 text: model.body || (model.isPlaceholder ? "No notifications to show." : "")
-                                                color: MatugenManager.rawColors.surface
+                                                color: MatugenManager.raw_colors.surface
                                                 // font.family: Theme.fontFamily
                                                 font.pixelSize: Appearance.font.size.normal
                                                 width: parent.width

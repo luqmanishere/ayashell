@@ -155,9 +155,9 @@ Item {
                         delegate: Rectangle {
                             id: notificationDelegate
                             width: parent.width
-                            color: MatugenManager.rawColors.primary_container
+                            color: MatugenManager.raw_colors.primary_container
                             radius: 20
-                            border.color: model.urgency == 2 ? MatugenManager.rawColors.error : MatugenManager.rawColors.outline
+                            border.color: model.urgency == 2 ? MatugenManager.raw_colors.error : MatugenManager.raw_colors.outline
                             border.width: 1
 
                             property bool appeared: model.appeared
@@ -180,9 +180,9 @@ Item {
                                     width: 36
                                     height: 36
                                     radius: width / 2
-                                    color: MatugenManager.rawColors.primary_container
+                                    color: MatugenManager.raw_colors.primary_container
                                     anchors.verticalCenter: parent.verticalCenter
-                                    border.color: Qt.darker(MatugenManager.rawColors.primary, 1.2)
+                                    border.color: Qt.darker(MatugenManager.raw_colors.primary, 1.2)
                                     border.width: 1.5
 
                                     // Priority order for notification icons: image > appIcon > icon
@@ -229,7 +229,7 @@ Item {
                                         // font.family: Theme.fontFamily
                                         font.pixelSize: 16
                                         font.bold: true
-                                        color: MatugenManager.rawColors.on_primary_container
+                                        color: MatugenManager.raw_colors.on_primary_container
                                     }
                                 }
 
@@ -240,7 +240,7 @@ Item {
                                     Text {
                                         text: model.appName
                                         width: parent.width
-                                        color: MatugenManager.rawColors.on_primary_container
+                                        color: MatugenManager.raw_colors.on_primary_container
                                         // font.family: Theme.fontFamily
                                         font.bold: true
                                         font.pixelSize: Appearance.font.size.large
@@ -249,7 +249,7 @@ Item {
                                     Text {
                                         text: model.summary
                                         width: parent.width
-                                        color: MatugenManager.rawColors.on_secondary_container
+                                        color: MatugenManager.raw_colors.on_secondary_container
                                         // color: "#eeeeee"
                                         // font.family: Theme.fontFamily
                                         font.pixelSize: Appearance.font.size.larger
@@ -259,7 +259,7 @@ Item {
                                     Text {
                                         text: model.body
                                         width: parent.width
-                                        color: MatugenManager.rawColors.on_tertiary_container
+                                        color: MatugenManager.raw_colors.on_tertiary_container
                                         // color: "#cccccc"
                                         // font.family: Theme.fontFamily
                                         font.pixelSize: Appearance.font.size.smaller
@@ -270,7 +270,7 @@ Item {
                             }
 
                             Timer {
-                                interval: 4000
+                                interval: 8000
                                 running: !dismissed
                                 repeat: false
                                 onTriggered: {

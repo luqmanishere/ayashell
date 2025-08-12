@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 
 Item {
@@ -14,7 +15,7 @@ Item {
 
     FileView {
         id: matugenFile
-        path: "/home/luqman/.config/quickshell/colors.qml"
+        path: Quickshell.env("HOME") + "/.config/quickshell/colors.qml"
         blockWrites: true
         watchChanges: true
 
@@ -28,39 +29,66 @@ Item {
             console.log("MatugenService: Colors file changed, reloading...");
             service.reloadColors();
         }
+
+        onLoadFailed: function (error) {
+            console.warn("MatugenService: Failed to load colors file:", error);
+            console.log("MatugenService: Using fallback colors");
+        }
     }
 
     function parseColors(qmlText) {
         if (!qmlText) {
-            console.warn("Matugen Service: No QML to process");
+            console.warn("MatugenService: No QML text to process, using fallback colors");
+            colors = {
+                raw: {}
+            };
+            isLoaded = false;
+            return;
         }
 
-        const lines = qmlText.split('\n');
-        const parsedColors = {};
+        try {
+            const lines = qmlText.split('\n');
+            const parsedColors = {};
 
-        // extract readonly color definitions
-        for (const line of lines) {
-            const match = line.match(/readonly\s+property\s+color\s+(\w+):\s*"(#[0-9a-fA-F]{6})"/);
-            if (match) {
-                const colorName = match[1];
-                const colorValue = match[2];
-                parsedColors[colorName] = colorValue;
+            // extract readonly color definitions
+            for (const line of lines) {
+                const match = line.match(/readonly\s+property\s+color\s+(\w+):\s*"(#[0-9a-fA-F]{6})"/);
+                if (match) {
+                    const colorName = match[1];
+                    const colorValue = match[2];
+                    parsedColors[colorName] = colorValue;
+                }
             }
+
+            if (Object.keys(parsedColors).length === 0) {
+                console.warn("MatugenService: No colors found in QML file, using fallback");
+                colors = {
+                    raw: {}
+                };
+                isLoaded = false;
+                return;
+            }
+
+            const surfaceColor = parsedColors.surface || "#000000";
+            const isLightTheme = getLuminance(surfaceColor) > 0.5;
+
+            console.log(`MatugenService: Detected ${isLightTheme ? 'light' : 'dark'} theme from surface color: ${surfaceColor}`);
+
+            colors = {
+                raw: parsedColors
+            };
+
+            isLoaded = true;
+            colorVersion++;
+
+            console.log("MatugenService: Colors loaded successfully from QML (version " + colorVersion + ")");
+        } catch (error) {
+            console.error("MatugenService: Error parsing colors:", error);
+            colors = {
+                raw: {}
+            };
+            isLoaded = false;
         }
-
-        const surfaceColor = parsedColors.surface || "#000000";
-        const isLightTheme = getLuminance(surfaceColor) > 0.5;
-
-        console.log(`MatugenService: Detected ${isLightTheme ? 'light' : 'dark'} theme from surface color: ${surfaceColor}]`);
-
-        colors = {
-            raw: parsedColors
-        };
-
-        isLoaded = true;
-        colorVersion++;
-
-        console.log("MatugenService: Colors loaded successfully from QML (version " + colorVersion + ")");
     }
 
     // Calculate luminance of a hex color

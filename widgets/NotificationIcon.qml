@@ -53,7 +53,7 @@ Item {
                     return Font.Normal;
                 }
             }
-            color: mouseAreaBell.containsMouse ? MatugenManager.rawColors.on_primary : (root.shell && root.shell.notificationHistoryWin && root.shell.notificationHistoryWin.hasUnread ? MatugenManager.rawColors.error : MatugenManager.rawColors.primary)
+            color: mouseAreaBell.containsMouse ? MatugenManager.raw_colors.on_primary : (root.shell && root.shell.notificationHistoryWin && root.shell.notificationHistoryWin.hasUnread ? MatugenManager.raw_colors.error : MatugenManager.raw_colors.primary)
         }
         MouseArea {
             id: mouseAreaBell

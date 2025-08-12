@@ -35,11 +35,11 @@ Rectangle {
 
                 color: {
                     if (model.workspace.is_focused) {
-                        return MatugenManager.rawColors.primary;
+                        return MatugenManager.raw_colors.primary;
                     } else if (model.workspace.is_active) {
-                        return MatugenManager.rawColors.secondary;
+                        return MatugenManager.raw_colors.secondary;
                     } else {
-                        return MatugenManager.rawColors.tertiary;
+                        return MatugenManager.raw_colors.tertiary;
                     }
                 }
 

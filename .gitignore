@@ -1,3 +1,4 @@
 .qmlls.ini
 .DS_Store
 colors.qml
+notification_history.json

@@ -11,25 +11,46 @@ Rectangle {
 
     // get current workspace for output, then get the active window
     function findActiveWindowName() {
-        const shellOutputName = screen.name;
-        var window_id;
-        var name;
-        for (var i = 0; i < NiriService.workspaces_list.count; i++) {
-            var model = NiriService.workspaces_list.get(i).workspace;
+        if (!screen || !screen.name) {
+            currentWindowName = "Desktop";
+            return;
+        }
 
-            if (model.output === shellOutputName && model.is_active && model.is_focused) {
-                window_id = model.active_window_id;
-                break;
+        const shellOutputName = screen.name;
+        var window_id = null;
+        var name = null;
+
+        // Find active workspace for this output
+        if (NiriService.workspaces_list) {
+            for (var i = 0; i < NiriService.workspaces_list.count; i++) {
+                var workspaceItem = NiriService.workspaces_list.get(i);
+                if (!workspaceItem || !workspaceItem.workspace)
+                    continue;
+
+                var workspace = workspaceItem.workspace;
+                if (workspace.output === shellOutputName && workspace.is_active && workspace.is_focused) {
+                    window_id = workspace.active_window_id;
+                    break;
+                }
             }
         }
-        for (var i = 0; i < NiriService.windows_list.count; i++) {
-            var model = NiriService.windows_list.get(i).window;
-            if (model.id === window_id) {
-                name = model.title;
-                break;
+
+        // Find window title
+        if (window_id && NiriService.windows_list) {
+            for (var j = 0; j < NiriService.windows_list.count; j++) {
+                var windowItem = NiriService.windows_list.get(j);
+                if (!windowItem || !windowItem.window)
+                    continue;
+
+                var window = windowItem.window;
+                if (window.id === window_id && window.title) {
+                    name = window.title;
+                    break;
+                }
             }
         }
-        currentWindowName = name;
+
+        currentWindowName = name || "Desktop";
     }
 
     TextMetrics {
@@ -44,7 +65,7 @@ Rectangle {
     Text {
         id: text
         anchors.centerIn: parent
-        color: MatugenManager.rawColors.on_primary_container
+        color: MatugenManager.raw_colors.on_primary_container
         font.pixelSize: Appearance.font.size.large
         text: metrics.elidedText
         transform: Rotation {
