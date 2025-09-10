@@ -2,6 +2,7 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
+import Quickshell.Wayland
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
 import qs.config
@@ -63,6 +64,7 @@ Item {
                 visible: notificationManager.notificationsVisible && notificationModel.count > 0 && shouldShowOnThisMonitor
                 screen: modelData
                 focusable: false
+                WlrLayershell.layer: WlrLayer.Overlay
 
                 property bool barVisible: true
                 property bool notificationsVisible: notificationManager.notificationsVisible
