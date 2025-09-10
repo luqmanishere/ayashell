@@ -13,6 +13,7 @@ ShellRoot {
     property var matugen: MatugenManager
     property var matugen_service: MatugenService {}
     property var niri_service: NiriService
+    property var audio_service: AudioService
     property var notificationHistoryWin: notificationHistoryLoader.active ? notificationHistoryLoader.item : null
 
     Shell {

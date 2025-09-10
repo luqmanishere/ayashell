@@ -24,7 +24,7 @@ Rectangle {
     property var workspaces: NiriService.workspaces_list
     readonly property int exclusiveZone: bar.implicitWidth
 
-    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, clock.implicitWidth, battery.implicitWidth)
+    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, audioWidget.implicitWidth, clock.implicitWidth, battery.implicitWidth)
     height: Screen.height
     color: MatugenManager.raw_colors.primary_container
 
@@ -71,9 +71,17 @@ Rectangle {
     Tray {
         id: tray
 
-        anchors.bottom: idleIcon.top
+        anchors.bottom: audioWidget.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: Appearance.spacing.smaller
+    }
+
+    AudioWidget {
+        id: audioWidget
+
+        anchors.bottom: idleIcon.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: Appearance.spacing.small
     }
 
     IdleIcon {
