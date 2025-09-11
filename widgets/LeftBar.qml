@@ -24,7 +24,7 @@ Rectangle {
     property var workspaces: NiriService.workspaces_list
     readonly property int exclusiveZone: bar.implicitWidth
 
-    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, audioWidget.implicitWidth, clock.implicitWidth, battery.implicitWidth)
+    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, audioWidget.implicitWidth, clock.implicitWidth, battery.implicitWidth) + 4
     height: Screen.height
     color: MatugenManager.raw_colors.primary_container
 
