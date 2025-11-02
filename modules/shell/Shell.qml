@@ -33,10 +33,18 @@ Scope {
 
             mask: Region {
                 regions: [
-                    Region { item: bar },
-                    Region { item: borders.topBorder },
-                    Region { item: borders.rightBorder },
-                    Region { item: borders.bottomBorder }
+                    Region {
+                        item: bar
+                    },
+                    Region {
+                        item: borders.topBorder
+                    },
+                    Region {
+                        item: borders.rightBorder
+                    },
+                    Region {
+                        item: borders.bottomBorder
+                    }
                 ]
             }
 
@@ -44,6 +52,7 @@ Scope {
                 id: borders
                 anchors.fill: parent
                 z: 0
+                bar: bar
             }
 
             // TODO: left bar

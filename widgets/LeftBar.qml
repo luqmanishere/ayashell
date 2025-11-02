@@ -22,7 +22,7 @@ Rectangle {
     required property ShellScreen screen
     property int margin: 3
     property var workspaces: NiriService.workspaces_list
-    readonly property int exclusiveZone: bar.implicitWidth
+    readonly property int exclusiveZone: bar.width
 
     implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, audioWidget.implicitWidth, clock.implicitWidth, battery.implicitWidth) + 4
     height: Screen.height
