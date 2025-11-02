@@ -11,6 +11,7 @@ Singleton {
     readonly property Padding padding: Padding {}
     readonly property FontStuff font: FontStuff {}
     readonly property Anim anim: Anim {}
+    readonly property Border border: Border {}
 
     component Rounding: QtObject {
         readonly property int small: 12
@@ -79,5 +80,10 @@ Singleton {
     component Anim: QtObject {
         readonly property AnimCurves curves: AnimCurves {}
         readonly property AnimDurations durations: AnimDurations {}
+    }
+
+    component Border: QtObject {
+        readonly property int thickness: 8
+        readonly property int radius: 12
     }
 }

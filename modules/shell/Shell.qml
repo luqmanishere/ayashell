@@ -10,7 +10,6 @@ Scope {
     required property var notificationHistoryWin
 
     Variants {
-
         model: Quickshell.screens
 
         StyledWindow {
@@ -33,7 +32,18 @@ Scope {
             anchors.right: true
 
             mask: Region {
-                item: bar
+                regions: [
+                    Region { item: bar },
+                    Region { item: borders.topBorder },
+                    Region { item: borders.rightBorder },
+                    Region { item: borders.bottomBorder }
+                ]
+            }
+
+            Borders {
+                id: borders
+                anchors.fill: parent
+                z: 0
             }
 
             // TODO: left bar
@@ -41,6 +51,7 @@ Scope {
                 id: bar
                 shell: scope.shell
                 screen: win.screen
+                z: 1
 
                 property var notificationHistoryWin: scope.notificationHistoryWin
             }
