@@ -8,6 +8,7 @@ import qs.data
 Item {
     id: root
     property var bar
+    property int exclusiveZone: Appearance.border.thickness
 
     // Top border
     Rectangle {

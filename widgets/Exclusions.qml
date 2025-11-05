@@ -10,7 +10,8 @@ Scope {
     id: root
 
     required property ShellScreen screen
-    required property Item bar
+    required property LeftBar bar
+    required property Borders borders
 
     ExclusionZone {
         anchors.left: true
@@ -19,14 +20,17 @@ Scope {
 
     ExclusionZone {
         anchors.top: true
+        exclusiveZone: root.borders.exclusiveZone
     }
 
     ExclusionZone {
         anchors.right: true
+        exclusiveZone: root.borders.exclusiveZone
     }
 
     ExclusionZone {
         anchors.bottom: true
+        exclusiveZone: root.borders.exclusiveZone
     }
 
     component ExclusionZone: StyledWindow {
