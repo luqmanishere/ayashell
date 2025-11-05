@@ -12,6 +12,7 @@ Singleton {
     readonly property FontStuff font: FontStuff {}
     readonly property Anim anim: Anim {}
     readonly property Border border: Border {}
+    readonly property TopPopupConfig topPopup: TopPopupConfig {}
 
     component Rounding: QtObject {
         readonly property int small: 12
@@ -85,5 +86,13 @@ Singleton {
     component Border: QtObject {
         readonly property int thickness: 8
         readonly property int radius: 12
+    }
+
+    component TopPopupConfig: QtObject {
+        readonly property int triggerWidth: 150
+        readonly property int triggerHeight: 8
+        readonly property int showDelay: 100
+        readonly property int popupWidth: 400
+        readonly property int popupHeight: 300
     }
 }

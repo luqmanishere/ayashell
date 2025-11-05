@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import QtQuick
 import qs.widgets
+import qs.config
 
 Scope {
     id: scope
@@ -44,6 +45,9 @@ Scope {
                     },
                     Region {
                         item: borders.bottomBorder
+                    },
+                    Region {
+                        item: topPopupTrigger
                     }
                 ]
             }
@@ -65,9 +69,37 @@ Scope {
                 property var notificationHistoryWin: scope.notificationHistoryWin
             }
 
+            TopPopupTrigger {
+                id: topPopupTrigger
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                triggerWidth: Appearance.topPopup.triggerWidth
+                triggerHeight: Appearance.topPopup.triggerHeight
+                showDelay: Appearance.topPopup.showDelay
+
+                z: 2
+
+                onShowPopup: topPopup.shouldShow = true
+                onHidePopup: topPopup.shouldShow = false
+            }
+
+            TopPopup {
+                id: topPopup
+                screen: win.screen
+                anchors.top: true
+
+                popupWidth: Appearance.topPopup.popupWidth
+                popupHeight: Appearance.topPopup.popupHeight
+
+                onMouseEntered: topPopupTrigger.cancelHide()
+                onMouseExited: topPopupTrigger.scheduleHide()
+            }
+
             Exclusions {
                 bar: bar
                 screen: win.modelData
+                borders: borders
             }
         }
     }
