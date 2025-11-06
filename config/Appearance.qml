@@ -89,8 +89,8 @@ Singleton {
     }
 
     component TopPopupConfig: QtObject {
-        readonly property int triggerWidth: 800
-        readonly property int triggerHeight: 8
+        readonly property int triggerWidth: 100
+        readonly property int triggerHeight: 5
         readonly property int showDelay: 100
         readonly property int popupWidth: 800
         readonly property int popupHeight: 500
