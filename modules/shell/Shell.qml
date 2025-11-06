@@ -89,9 +89,6 @@ Scope {
                 screen: win.screen
                 anchors.top: true
 
-                popupWidth: Appearance.topPopup.popupWidth
-                popupHeight: Appearance.topPopup.popupHeight
-
                 onMouseEntered: topPopupTrigger.cancelHide()
                 onMouseExited: topPopupTrigger.scheduleHide()
             }
