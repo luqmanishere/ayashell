@@ -18,6 +18,12 @@ Item {
         anchors.right: parent.right
         height: Appearance.border.thickness
         color: MatugenManager.raw_colors.primary_container
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 1000
+            }
+        }
     }
 
     // Right border
@@ -28,6 +34,12 @@ Item {
         anchors.bottom: parent.bottom
         width: Appearance.border.thickness
         color: MatugenManager.raw_colors.primary_container
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 1000
+            }
+        }
     }
 
     // Bottom border
@@ -38,6 +50,12 @@ Item {
         anchors.right: parent.right
         height: Appearance.border.thickness
         color: MatugenManager.raw_colors.primary_container
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 1000
+            }
+        }
     }
 
     Rectangle {

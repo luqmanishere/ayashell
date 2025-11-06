@@ -28,6 +28,12 @@ Rectangle {
     height: Screen.height
     color: MatugenManager.raw_colors.primary_container
 
+    Behavior on color {
+        ColorAnimation {
+            duration: 1000
+        }
+    }
+
     ClippingRectangle {
         id: image
         implicitWidth: 32
