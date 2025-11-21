@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
@@ -16,6 +17,17 @@ PanelWindow {
     property bool hovered: false
     property bool shouldShow: false
     property int cornerRadius: 30
+    property int currentTab: 0
+    readonly property var tabs: [{
+            "title": "System Info",
+            "icon": "monitoring"
+        }, {
+            "title": "Tasks",
+            "icon": "checklist"
+        }, {
+            "title": "Settings",
+            "icon": "settings"
+        }]
 
     signal mouseEntered
     signal mouseExited
@@ -40,23 +52,136 @@ PanelWindow {
         color: MatugenManager.raw_colors.primary_container
         bottomRightRadius: Appearance.rounding.normal
         bottomLeftRadius: Appearance.rounding.normal
+        border.width: 0
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
+        ColumnLayout {
+            anchors.margins: 5
+            anchors.fill: mainRect
+            spacing: 5
 
-            onEntered: {
-                popup.hovered = true;
-                popup.mouseEntered();
+            RowLayout {
+                id: tabsArea
+                Layout.fillWidth: true
+                Layout.minimumHeight: 42
+                spacing: Appearance.spacing.small
+                Layout.alignment: Qt.AlignHCenter
+
+                Repeater {
+                    id: tabRepeater
+                    model: popup.tabs
+
+                    Rectangle {
+                        required property var modelData
+                        required property int index
+                        property bool selected: popup.currentTab === index
+                        radius: Appearance.rounding.full
+                        implicitHeight: 34
+                        implicitWidth: tabRow.implicitWidth + 24
+                        color: selected ? MatugenManager.raw_colors.primary : MatugenManager.raw_colors.secondary_container
+
+                        RowLayout {
+                            id: tabRow
+                            anchors.centerIn: parent
+                            spacing: Appearance.spacing.small
+
+                            Text {
+                                text: modelData.icon
+                                color: selected ? MatugenManager.raw_colors.on_primary : MatugenManager.raw_colors.on_primary_container
+                                font.family: Appearance.font.family.material
+                                font.pixelSize: Appearance.font.size.normal
+                            }
+
+                            Text {
+                                id: tabText
+                                text: modelData.title
+                                color: selected ? MatugenManager.raw_colors.on_primary : MatugenManager.raw_colors.on_primary_container
+                                font.family: Appearance.font.family.sans
+                                font.pixelSize: Appearance.font.size.normal
+                                font.weight: selected ? Font.DemiBold : Font.Medium
+                            }
+                        }
+
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: Appearance.anim.durations.small
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: popup.currentTab = index
+                        }
+                    }
+                }
             }
 
-            onExited: {
-                popup.hovered = false;
-                popup.mouseExited();
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: MatugenManager.raw_colors.outline
             }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                color: MatugenManager.raw_colors.primary
+                radius: Appearance.rounding.normal
+
+                StackLayout {
+                    anchors.fill: parent
+                    anchors.margins: Appearance.padding.small
+                    currentIndex: popup.currentTab
+
+                    SystemInfoPanel {}
+
+                    Item {
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Appearance.rounding.normal
+                            color: MatugenManager.raw_colors.secondary_container
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Tasks panel coming soon"
+                                color: MatugenManager.raw_colors.on_secondary_container
+                                font.family: Appearance.font.family.sans
+                                font.pixelSize: Appearance.font.size.large
+                            }
+                        }
+                    }
+
+                    Item {
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: Appearance.rounding.normal
+                            color: MatugenManager.raw_colors.secondary_container
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "Settings panel coming soon"
+                                color: MatugenManager.raw_colors.on_secondary_container
+                                font.family: Appearance.font.family.sans
+                                font.pixelSize: Appearance.font.size.large
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+    }
 
-        // TODO: add content
+    HoverHandler {
+        id: popupHoverHandler
+        onHoveredChanged: {
+            popup.hovered = hovered;
+            if (hovered)
+                popup.mouseEntered();
+            else
+                popup.mouseExited();
+        }
     }
 
     Rectangle {

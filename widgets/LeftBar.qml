@@ -21,10 +21,9 @@ Rectangle {
     required property var shell
     required property ShellScreen screen
     property int margin: 3
-    property var workspaces: NiriService.workspaces_list
     readonly property int exclusiveZone: bar.width
 
-    implicitWidth: Math.max(image.implicitWidth, workspaces.implicitWidth, windowName.implicitWidth, tray.implicitWidth, audioWidget.implicitWidth, clock.implicitWidth, battery.implicitWidth) + 4
+    implicitWidth: Math.max(image.implicitWidth, workspacesWidget.implicitWidth, windowName.implicitWidth, tray.implicitWidth, audioWidget.implicitWidth, clock.implicitWidth, battery.implicitWidth) + 4
     height: Screen.height
     color: MatugenManager.raw_colors.primary_container
 
@@ -57,7 +56,8 @@ Rectangle {
     }
 
     Workspaces {
-        id: workspaces
+        id: workspacesWidget
+        screen: bar.screen
         anchors.top: image.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: Appearance.padding.smaller
@@ -69,7 +69,7 @@ Rectangle {
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        anchors.top: workspaces.bottom
+        anchors.top: workspacesWidget.bottom
         anchors.bottom: tray.top
         anchors.margins: Appearance.spacing.large
     }
