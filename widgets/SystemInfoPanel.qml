@@ -23,6 +23,8 @@ Item {
         property bool hovered: false
         property bool invertProgressSeverity: false
         property bool forcePrimaryProgress: false
+        property bool glowActive: false
+        property real glowPulse: 0.0
 
         function progressColor() {
             if (card.forcePrimaryProgress)
@@ -38,8 +40,6 @@ Item {
 
         radius: Appearance.rounding.normal
         color: MatugenManager.raw_colors.secondary_container
-        border.width: 1
-        border.color: hovered ? MatugenManager.raw_colors.primary : MatugenManager.raw_colors.outline
         scale: hovered ? 1.015 : 1.0
         Behavior on color {
             ColorAnimation {
@@ -61,6 +61,18 @@ Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumWidth: 180
+
+        Rectangle {
+            id: chargingGlow
+            anchors.fill: parent
+            radius: Appearance.rounding.normal
+            color: MatugenManager.raw_colors.primary
+            visible: glowActive
+            opacity: 0.08 + (card.glowPulse * 0.16)
+        }
+
+        border.width: glowActive ? 2 : 1
+        border.color: glowActive ? MatugenManager.raw_colors.primary : (hovered ? MatugenManager.raw_colors.primary : MatugenManager.raw_colors.outline)
 
         ColumnLayout {
             anchors.fill: parent
@@ -145,6 +157,21 @@ Item {
             onExited: card.hovered = false
         }
 
+        SequentialAnimation on glowPulse {
+            running: card.glowActive
+            loops: Animation.Infinite
+            NumberAnimation {
+                to: 1.0
+                duration: 850
+                easing.type: Easing.InOutSine
+            }
+            NumberAnimation {
+                to: 0.0
+                duration: 850
+                easing.type: Easing.InOutSine
+            }
+        }
+
     }
 
     Rectangle {
@@ -206,6 +233,7 @@ Item {
                 subtitle: SystemInfoService.batteryCharging ? "Charging" : "Discharging"
                 progress: SystemInfoService.batteryPercent
                 invertProgressSeverity: true
+                glowActive: SystemInfoService.batteryCharging
             }
 
             MetricCard {
