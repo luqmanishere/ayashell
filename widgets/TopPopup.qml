@@ -16,7 +16,10 @@ PanelWindow {
     property int popupHeight: Appearance.topPopup.popupHeight
     property bool hovered: false
     property bool shouldShow: false
+    property bool animatingOut: false
     property int cornerRadius: 30
+    property real contentY: -26
+    property real contentOpacity: 0
     property int currentTab: 0
     readonly property var tabs: [{
             "title": "System Info",
@@ -41,11 +44,25 @@ PanelWindow {
     WlrLayershell.namespace: "quickshell-top-popup"
     exclusiveZone: 0
 
-    visible: shouldShow
+    visible: shouldShow || animatingOut || showAnim.running || hideAnim.running
+
+    onShouldShowChanged: {
+        if (shouldShow) {
+            animatingOut = false;
+            hideAnim.stop();
+            showAnim.restart();
+        } else if (visible) {
+            showAnim.stop();
+            animatingOut = true;
+            hideAnim.restart();
+        }
+    }
 
     Rectangle {
         id: mainRect
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: popup.contentY
+        opacity: popup.contentOpacity
         width: popup.popupWidth
         height: popup.popupHeight
 
@@ -119,12 +136,6 @@ PanelWindow {
 
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: MatugenManager.raw_colors.outline
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
                 Layout.fillHeight: true
                 color: MatugenManager.raw_colors.primary
                 radius: Appearance.rounding.normal
@@ -187,6 +198,8 @@ PanelWindow {
     Rectangle {
         id: cornersArea
         anchors.fill: parent
+        y: popup.contentY
+        opacity: popup.contentOpacity
         color: "transparent"
 
         Repeater {
@@ -197,6 +210,56 @@ PanelWindow {
                 corner: modelData
                 color: MatugenManager.raw_colors.primary_container
             }
+        }
+    }
+
+    ParallelAnimation {
+        id: showAnim
+        SequentialAnimation {
+            NumberAnimation {
+                target: popup
+                property: "contentY"
+                to: -4
+                duration: 240
+                easing.type: Easing.OutCubic
+            }
+            NumberAnimation {
+                target: popup
+                property: "contentY"
+                to: 0
+                duration: 220
+                easing.type: Easing.OutCubic
+            }
+        }
+        NumberAnimation {
+            target: popup
+            property: "contentOpacity"
+            to: 1
+            duration: 240
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    ParallelAnimation {
+        id: hideAnim
+        NumberAnimation {
+            target: popup
+            property: "contentY"
+            to: -22
+            duration: 220
+            easing.type: Easing.InBack
+            easing.overshoot: 1.1
+        }
+        NumberAnimation {
+            target: popup
+            property: "contentOpacity"
+            to: 0
+            duration: 200
+            easing.type: Easing.InCubic
+        }
+        onFinished: {
+            popup.animatingOut = false;
+            popup.contentY = -26;
         }
     }
 
